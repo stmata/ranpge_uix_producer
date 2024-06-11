@@ -8,7 +8,7 @@ function AreaLogin() {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState(false);
   const isSkemaEmail = (email) => {
-    const skemaEmailRegex = /@skema\.edu$/;
+    const skemaEmailRegex = /@gmail\.com$/;
     return skemaEmailRegex.test(email);
   };
   useEffect(() => {
