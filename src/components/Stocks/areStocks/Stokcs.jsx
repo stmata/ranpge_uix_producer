@@ -3,9 +3,11 @@ import Select from 'react-select';
 import './Stocks.scss';
 import vspic from '../../../assets/images/VS.png';
 import Alert from '@mui/material/Alert';
-
+import { useUser } from '../../../context/UserContext'
 
 const Stocks = () => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL 
+  const { superUser } = useUser();
   const [vsList, setVsList] = useState([]);
   const levelOptions = [
     { value: 'L3', label: 'L3' },
@@ -13,10 +15,9 @@ const Stocks = () => {
   ];
   const [selectedLevel, setSelectedLevel] = useState(levelOptions[0]); 
 
-
   const fetchVSList = async () => {
     try {
-      const response = await fetch(`https://pge-tunnel.azurewebsites.net/statistics/show_vs?level=${selectedLevel.value}`);
+      const response = await fetch(`${baseUrl}/statistics/show_vs?level=${selectedLevel.value}`);
       const data = await response.json();
       setVsList(data);
     } catch (error) {
@@ -46,13 +47,13 @@ const Stocks = () => {
     let params = {};
 
     if (type === 'General') {
-      url = 'https://pge-tunnel.azurewebsites.net/statistics/delete_vs_gen';
+      url = `${baseUrl}/statistics/delete_vs_gen`;
       params = {
         niveau_selected: niveau_selected,
         cours: cours
       };
     } else {
-      url = 'https://pge-tunnel.azurewebsites.net/statistics/delete_vs';
+      url = `${baseUrl}/statistics/delete_vs`;
       params = {
         niveau_selected: niveau_selected,
         cours: cours,
@@ -136,8 +137,9 @@ const Stocks = () => {
                           data-niveau_selected={niveau_selected}
                           data-cours={cours}
                           data-topic={topic}
+                          disabled={!superUser}
                         >
-                          Delete
+                          {superUser ? 'Delete' : 'Delete Not Authorized'}
                           
                         </button>
                       </div>

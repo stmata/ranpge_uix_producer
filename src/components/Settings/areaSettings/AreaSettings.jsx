@@ -5,6 +5,7 @@ import Modal from '../../Modal/Modal'; // Importez votre composant Modal
 import './AreaSettings.scss';
 
 const AreaSettings = () => {
+    const baseUrl = import.meta.env.VITE_APP_BASE_URL 
     const [selectedLevel, setSelectedLevel] = useState(null);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [numInputs, setNumInputs] = useState(0);
@@ -41,7 +42,7 @@ const AreaSettings = () => {
     const fetchCourses = async (selectedLevelValue) => {
         setIsLoadingCourses(true);
         try {
-            const response = await fetch(`https://pge-tunnel.azurewebsites.net/home/get_courses?level=${selectedLevelValue}`);
+            const response = await fetch(`${baseUrl}/home/get_courses?level=${selectedLevelValue}`);
             const data = await response.json();
             setCourses(Array.isArray(data) ? data : []);
         } catch (error) {
@@ -93,7 +94,7 @@ const AreaSettings = () => {
                 setModalContent({ icon: <MdError />, message: 'Please enter at least one module name.' });
                 return;
             }
-            const url = `https://pge-tunnel.azurewebsites.net/settings/add_update_documents?type=add_update_documents&level=${selectedLevel.value}&course_name=${selectedCourse.value}&module_names=${moduleNames.join(',')}`;
+            const url = `${baseUrl}/settings/add_update_documents?type=add_update_documents&level=${selectedLevel.value}&course_name=${selectedCourse.value}&module_names=${moduleNames.join(',')}`;
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {

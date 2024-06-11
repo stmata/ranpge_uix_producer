@@ -6,6 +6,7 @@ import { MdCheckCircle, MdError } from 'react-icons/md';
 import './Areaactivate.scss'
 
 const Areaactivate = () => {
+    const baseUrl = import.meta.env.VITE_APP_BASE_URL
     const [toggleStatesL3, setToggleStatesL3] = useState({});
     const [toggleStatesM1, setToggleStatesM1] = useState({});
     const [loading, setLoading] = useState(true);
@@ -18,7 +19,7 @@ const Areaactivate = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseL3 = await axios.get('https://pge-tunnel.azurewebsites.net/settings/courses_status?level=L3');
+                const responseL3 = await axios.get(`${baseUrl}/settings/courses_status?level=L3`);
                 const coursesDataL3 = responseL3.data;
                 const togglesL3 = {};
                 coursesDataL3.forEach(course => {
@@ -27,7 +28,7 @@ const Areaactivate = () => {
                 setToggleStatesL3(togglesL3);
                 setInitialToggleStatesL3(togglesL3);
 
-                const responseM1 = await axios.get('https://pge-tunnel.azurewebsites.net/settings/courses_status?level=M1');
+                const responseM1 = await axios.get(`${baseUrl}/settings/courses_status?level=M1`);
                 const coursesDataM1 = responseM1.data;
                 const togglesM1 = {};
                 coursesDataM1.forEach(course => {
@@ -85,10 +86,10 @@ const Areaactivate = () => {
             });
 
             if (modifiedCoursesL3.length > 0) {
-                await axios.post('https://pge-tunnel.azurewebsites.net/settings/update_course_status', { level: 'L3', courses: modifiedCoursesL3 });
+                await axios.post(`${baseUrl}/settings/update_course_status`, { level: 'L3', courses: modifiedCoursesL3 });
             }
             if (modifiedCoursesM1.length > 0) {
-                await axios.post('https://pge-tunnel.azurewebsites.net/settings/update_course_status', { level: 'M1', courses: modifiedCoursesM1 });
+                await axios.post(`${baseUrl}/settings/update_course_status`, { level: 'M1', courses: modifiedCoursesM1 });
             }
             setModalType('success');
             setModalContent('Changes saved successfully!');

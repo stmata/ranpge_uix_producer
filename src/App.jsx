@@ -13,6 +13,9 @@ import Profilescreen from "./screens/profile/Profilescreen";
 import CalendarScreen from "./screens/Calendar/CalendarScreen";
 import Settingsscreen from "./screens/Settings/Settingsscreen";
 import ActivateScreen from "./screens/activate/ActivateScreen";
+import LoginScreen from "./screens/Login/LoginScreen";
+import AuthOutlet from '@auth-kit/react-router/AuthOutlet'
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -28,22 +31,25 @@ function App() {
 
   return (
     <>
-      <Router>
-        <Routes>
-          <Route element={<BaseLayout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/Stocks" element={<StocksScreen /> }/>
-            <Route path="/Process" element={<ProcessScreen /> }/>
-            <Route path="/Profile" element={<Profilescreen /> }/>
-            <Route path="/Calendar" element={<CalendarScreen /> }/>
-            <Route path="/Settings" element={<Settingsscreen /> }/>
-            <Route path="/activate" element={<ActivateScreen /> }/>
-
+    <UserProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LoginScreen />} />
+            <Route element={<AuthOutlet fallbackPath='/' />}>
+              <Route element={<BaseLayout />}>
+                <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/Stocks" element={<StocksScreen /> }/>
+                <Route path="/Process" element={<ProcessScreen /> }/>
+                <Route path="/Profile" element={<Profilescreen /> }/>
+                <Route path="/Calendar" element={<CalendarScreen /> }/>
+                <Route path="/Settings" element={<Settingsscreen /> }/>
+                <Route path="/activate" element={<ActivateScreen /> }/>
+              </Route>
+            </Route>
             <Route path="*" element={<PageNotFound />} />
-          </Route>
-        </Routes>
+          </Routes>
 
-        <button
+          <button
           type="button"
           className="theme-toggle-btn"
           onClick={toggleTheme}
@@ -53,7 +59,8 @@ function App() {
             src={theme === LIGHT_THEME ? SunIcon : MoonIcon}
           />
         </button>
-      </Router>
+        </Router>
+      </UserProvider>
     </>
   );
 }

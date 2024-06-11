@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import "./AreaTable.scss";
 
 const AreaTable = () => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL 
   const [levelInfo, setLevelInfo] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://pge-tunnel.azurewebsites.net/statistics/levelInfos')
+    fetch(`${baseUrl}/statistics/levelInfos`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

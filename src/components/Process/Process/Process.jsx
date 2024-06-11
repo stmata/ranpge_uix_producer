@@ -8,6 +8,7 @@ import Modal from '../../Modal/Modal';
 import { MdCheckCircle, MdWarning, MdError } from 'react-icons/md';
 
 const Process = () => {
+    const baseUrl = import.meta.env.VITE_APP_BASE_URL 
     const [courses, setCourses] = useState([]);
     const [topics, setTopics] = useState([]);
     const [isLoadingCourses, setIsLoadingCourses] = useState(false);
@@ -142,7 +143,7 @@ const Process = () => {
     const fetchCourses = async (selectedLevelValue) => {
         setIsLoadingCourses(true);
         try {
-            const response = await fetch(`https://pge-tunnel.azurewebsites.net/home/get_courses?level=${selectedLevelValue}`);
+            const response = await fetch(`${baseUrl}/home/get_courses?level=${selectedLevelValue}`);
             const data = await response.json();
             setCourses(Array.isArray(data) ? data : []);
         } catch (error) {
@@ -183,7 +184,7 @@ const Process = () => {
     //         formData.append('topic', topic.value);
     //         formData.append('title', 'Your Document Title');
     //         formData.append('file', resourceTypes[topic.value].uploadedFiles[0]);
-    //         const response = await fetch('https://pge-tunnel.azurewebsites.net/home/pdf_pptx_upload', {
+    //         const response = await fetch(`${baseUrl}/home/pdf_pptx_upload`, {
     //             method: 'POST',
     //             body: formData
     //         });
@@ -224,7 +225,7 @@ const Process = () => {
                 formData.append('topic', topic.value);
                 formData.append('title', 'Your Document Title');
                 formData.append('file', file);
-                const response = await fetch('https://pge-tunnel.azurewebsites.net/home/pdf_pptx_upload', {
+                const response = await fetch(`${baseUrl}/home/pdf_pptx_upload`, {
                     method: 'POST',
                     body: formData
                 });
@@ -270,7 +271,7 @@ const Process = () => {
                     formData.append('title', youtubeTitles[i] || 'Your YouTube Title');
                     formData.append('link', youtubeUrls[i]);
     
-                    const response = await fetch('https://pge-tunnel.azurewebsites.net/home/youtube_link', {
+                    const response = await fetch(`${baseUrl}/home/youtube_link`, {
                         method: 'POST',
                         body: formData
                     });
@@ -365,7 +366,7 @@ const Process = () => {
     const fetchTopics = async (selectedLevelValue, selectedCourseValue) => {
         setIsLoadingTopics(true);
         try {
-            const response = await fetch(`https://pge-tunnel.azurewebsites.net/home/get_modules?level=${selectedLevelValue}&course_name=${selectedCourseValue}`);
+            const response = await fetch(`${baseUrl}/home/get_modules?level=${selectedLevelValue}&course_name=${selectedCourseValue}`);
             const data = await response.json();
             setTopics(Array.isArray(data) ? data : []);
         } catch (error) {

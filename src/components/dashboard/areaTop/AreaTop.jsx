@@ -6,8 +6,11 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { addDays } from "date-fns";
 import { DateRange } from "react-date-range";
+import { useUser } from '../../../context/UserContext'
 
 const AreaTop = () => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL 
+  const { setSuperUser, userID } = useUser();
   const { openSidebar } = useContext(SidebarContext);
 
   const [state, setState] = useState([
@@ -32,10 +35,31 @@ const AreaTop = () => {
   };
 
   useEffect(() => {
+    const hasFetchedSuperUserStatus = localStorage.getItem('hasFetchedSuperUserStatus');
+
+    const fetchSuperUserStatus = async () => {
+      try {
+        const response = await fetch(`${baseUrl}/user/${userID}/superUser`);
+        const data = await response.json();
+        if (response.ok) {
+          localStorage.setItem('hasFetchedSuperUserStatus', true);
+          setSuperUser(data.superUser);
+        } else {
+          console.error("Failed to fetch superUser status:");
+        }
+      } catch (error) {
+        console.error("Error fetching superUser status:", error);
+      }
+    };
+    if (!hasFetchedSuperUserStatus){
+      fetchSuperUserStatus();
+    }
+    
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    
   }, []);
 
   return (

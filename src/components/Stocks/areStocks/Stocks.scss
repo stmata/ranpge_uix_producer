@@ -29,6 +29,12 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
   }
+
+  .Delete_btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
   .vs-list {
     flex: 1 0 100%;
     display: flex;

@@ -3,6 +3,7 @@ import AreaCard from "./AreaCard";
 import "./AreaCards.scss";
 
 const AreaCards = () => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL 
   const [jsonData, setJsonData] = useState({});
 
   useEffect(() => {
@@ -11,7 +12,7 @@ const AreaCards = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("https://pge-tunnel.azurewebsites.net/statistics/show_pie"); // Assurez-vous de remplacer l'URL par celle de votre API
+      const response = await fetch(`${baseUrl}/statistics/show_pie`); // Assurez-vous de remplacer l'URL par celle de votre API
       const data = await response.json();
       setJsonData(data);
     } catch (error) {

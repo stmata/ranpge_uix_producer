@@ -13,12 +13,13 @@ import { LIGHT_THEME } from "../../../constants/themeConstants";
 import "./AreaCharts.scss";
 
 const AreaBarChart = () => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL 
   const { theme } = useContext(ThemeContext);
   const [data, setData] = useState([]);
 
   const fetchDataFromBackend = async () => {
     try {
-      const response = await fetch("https://pge-tunnel.azurewebsites.net/statistics/nbreVS");
+      const response = await fetch(`${baseUrl}/statistics/nbreVS`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
