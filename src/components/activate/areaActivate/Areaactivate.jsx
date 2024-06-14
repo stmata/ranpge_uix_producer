@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Modal from '../../Modal/Modal';
 import { MdCheckCircle, MdError } from 'react-icons/md';
+import AnimationSetting from '../../../utils/animation/Animation_setting';
 import './Areaactivate.scss'
 
 const Areaactivate = () => {
@@ -103,7 +104,7 @@ const Areaactivate = () => {
     };
 
     if (loading) {
-        return <div className='alltxt'>Loading...</div>;
+        return <AnimationSetting/>;
     }
 
     return (
