@@ -20,50 +20,52 @@ const AreaEvaluation = () => {
     const [modalType, setModalType] = useState('success');
     const [modalContent, setModalContent] = useState('');
 
+
+    const fetchData = async () => {
+        try {
+            const responseL3 = await axios.get(`${baseUrl}/settings/courses_status?level=L3`);
+            const coursesDataL3 = responseL3.data;
+            const togglesQCML3 = {};
+            const togglesOuverteL3 = {};
+
+            await Promise.all(coursesDataL3.map(async (course) => {
+                const coursName = course.name;
+                const responseQCM = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/L3/QCM`);
+                togglesQCML3[coursName] = responseQCM.data.status;
+                const responseOuverte = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/L3/Ouverte`);
+                togglesOuverteL3[coursName] = responseOuverte.data.status;
+            }));
+
+            setToggleStatesQCML3(togglesQCML3);
+            setInitialToggleStatesQCML3(togglesQCML3);
+            setToggleStatesOuverteL3(togglesOuverteL3);
+            setInitialToggleStatesOuverteL3(togglesOuverteL3);
+
+            const responseM1 = await axios.get(`${baseUrl}/settings/courses_status?level=M1`);
+            const coursesDataM1 = responseM1.data;
+            const togglesQCMM1 = {};
+            const togglesOuverteM1 = {};
+
+            await Promise.all(coursesDataM1.map(async (course) => {
+                const coursName = course.name;
+                const responseQCM = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/M1/QCM`);
+                togglesQCMM1[coursName] = responseQCM.data.status;
+                const responseOuverte = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/M1/Ouverte`);
+                togglesOuverteM1[coursName] = responseOuverte.data.status;
+            }));
+
+            setToggleStatesQCMM1(togglesQCMM1);
+            setInitialToggleStatesQCMM1(togglesQCMM1);
+            setToggleStatesOuverteM1(togglesOuverteM1);
+            setInitialToggleStatesOuverteM1(togglesOuverteM1);
+
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const responseL3 = await axios.get(`${baseUrl}/settings/courses_status?level=L3`);
-                const coursesDataL3 = responseL3.data;
-                const togglesQCML3 = {};
-                const togglesOuverteL3 = {};
-
-                await Promise.all(coursesDataL3.map(async (course) => {
-                    const coursName = course.name;
-                    const responseQCM = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/L3/QCM`);
-                    togglesQCML3[coursName] = responseQCM.data.status;
-                    const responseOuverte = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/L3/Ouverte`);
-                    togglesOuverteL3[coursName] = responseOuverte.data.status;
-                }));
-
-                setToggleStatesQCML3(togglesQCML3);
-                setInitialToggleStatesQCML3(togglesQCML3);
-                setToggleStatesOuverteL3(togglesOuverteL3);
-                setInitialToggleStatesOuverteL3(togglesOuverteL3);
-
-                const responseM1 = await axios.get(`${baseUrl}/settings/courses_status?level=M1`);
-                const coursesDataM1 = responseM1.data;
-                const togglesQCMM1 = {};
-                const togglesOuverteM1 = {};
-
-                await Promise.all(coursesDataM1.map(async (course) => {
-                    const coursName = course.name;
-                    const responseQCM = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/M1/QCM`);
-                    togglesQCMM1[coursName] = responseQCM.data.status;
-                    const responseOuverte = await axios.get(`${baseUrl}/checkstatusofdatafram/${coursName}/M1/Ouverte`);
-                    togglesOuverteM1[coursName] = responseOuverte.data.status;
-                }));
-
-                setToggleStatesQCMM1(togglesQCMM1);
-                setInitialToggleStatesQCMM1(togglesQCMM1);
-                setToggleStatesOuverteM1(togglesOuverteM1);
-                setInitialToggleStatesOuverteM1(togglesOuverteM1);
-
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
         fetchData();
     }, []);
 
@@ -175,10 +177,10 @@ const AreaEvaluation = () => {
                     status: update.status,
                 })
                 .then(response => {
-                    updateMessages.push(`For ${update.course}, update successful.\n`);
+                    updateMessages.push(`➟ ${update.course}=> ${update.evaluation_type} ✅.\n`);
                 })
                 .catch(error => {
-                    updateMessages.push(`For ${update.course}, error updating.\n`);
+                    updateMessages.push(`➟ ${update.course}=> ${update.evaluation_type} ❌.\n`);
                 })
             );
     
@@ -186,7 +188,7 @@ const AreaEvaluation = () => {
             setModalType('success');
             setModalContent(updateMessages.map(msg => `${msg}`));
             setModalOpen(true);
-    
+            await fetchData();
         } catch (error) {
             console.error('Error updating course statuses:', error);
             setModalType('error');
