@@ -37,13 +37,13 @@ function App() {
             <Route path="/" element={<LoginScreen />} />
             <Route element={<AuthOutlet fallbackPath='/' />}>
               <Route element={<BaseLayout />}>
-                <Route path="/Dashboard" Component={<Dashboard />} />
-                <Route path="/Stocks" Component={<StocksScreen /> }/>
-                <Route path="/Process" Component={<ProcessScreen /> }/>
-                <Route path="/Profile" Component={<Profilescreen /> }/>
-                <Route path="/Calendar" Component={<CalendarScreen /> }/>
-                <Route path="/Settings" Component={<Settingsscreen /> }/>
-                <Route path="/activate" Component={<ActivateScreen /> }/>
+                <Route path="/Dashboard" element={<Dashboard />} />
+                <Route path="/Stocks" element={<StocksScreen /> }/>
+                <Route path="/Process" element={<ProcessScreen /> }/>
+                <Route path="/Profile" element={<Profilescreen /> }/>
+                <Route path="/Calendar" element={<CalendarScreen /> }/>
+                <Route path="/Settings" element={<Settingsscreen /> }/>
+                <Route path="/activate" element={<ActivateScreen /> }/>
               </Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
