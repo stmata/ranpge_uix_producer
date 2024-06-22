@@ -4,10 +4,12 @@ import './Stocks.scss';
 import vspic from '../../../assets/images/VS.png';
 import Alert from '@mui/material/Alert';
 import { useUser } from '../../../context/UserContext'
+import { useNavigate } from 'react-router-dom';
 
 const Stocks = () => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL 
   const { superUser } = useUser();
+  const navigate = useNavigate();
   const [vsList, setVsList] = useState([]);
   const levelOptions = [
     { value: 'L3', label: 'L3' },
@@ -74,7 +76,8 @@ const Stocks = () => {
       })
       .then(data => {
         console.log(data);
-        window.location.reload();
+        //window.location.reload();
+        navigate("/Dashboard")
       })
       .catch(error => {
         console.error('Error deleting VS:', error);
